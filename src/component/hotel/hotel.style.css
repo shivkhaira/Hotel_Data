@@ -1,0 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Lobster');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
+body
+{
+  
+    font-family: 'Roboto', sans-serif;
+}
+
+.title {
+    text-align: center;
+    font-family: "Lobster", serif;
+    color: rgba(182, 50, 10, 0.555);
+    text-decoration: underline;
+}
+
+.search
+{
+    width: 130px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    background-image: url('https://www.w3schools.com/howto/searchicon.png');
+    background-position: 10px 10px; 
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 40px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+
+.search:focus {
+    width: 100%;
+  }
+
+  .category{
+     color:black;
+  }
+
+  .block {
+    border:2px blanchedalmond dotted;
+    margin-top: 2%; 
+    padding-bottom: 2%;      
+  }
+
+  .add_b
+  {
+      width: 100%;
+      background-color: blueviolet;
+      border: 2px wheat;
+      height: 5em;
+      color: white;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 20px;
+  }
+
+  .plus_b
+  {
+    
+    background-color: green;
+    border: 2px wheat;
+    height: 5em;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    display: inline-block;
+    width:40%;
+  }
+
+  .minus_b
+  {
+    display: inline-block;
+    width:40%;
+    background-color: red;
+    border: 2px wheat;
+    height: 5em;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+   
+  }
+  .quant
+  {
+    
+    display: inline-block;
+    width:10%;
+  }
+.line{
+    width:100%;
+    text-align: center;
+}
+
+
+
+.bottom
+{
+  position:fixed;
+  left:0px;
+  bottom:0px;
+  width:100%;
+  background:rgb(63, 73, 160);
+}
+
+.cart {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: black;
+    z-index: 2;
+    cursor: pointer;
+}
+
+.text {
+    top:20%;
+    position: relative;
+    font-size: 20px;
+    color: white;
+
+}
+.shop-page
+{
+  height: 100%;
+  margin-bottom: 20%;
+}
+
+.example-enter {
+  height: 0px;
+}
+
+.example-enter.example-enter-active {
+  height: 100%;
+  transition: height .3s ease;
+}
+
+.example-leave.example-leave-active {
+  height: 0px;
+ transition: height .4s ease;
+}
+
+.dish_image
+{
+ float: right;
+}
+
+.action
+{
+  width:100%;
+  text-align: center;
+  bottom: 0;
+  position: fixed;
+}
+
+.action_b
+{
+  width: 50%;
+  height: 3em;
+  display: inline-block;
+  background-color: rgb(20, 178, 218);
+  font-family: 'Montserrat', sans-serif;
+  border: 2px wheat;
+}
+
+.action_c
+{
+  width: 50%;
+  height: 3em;
+  display: inline-block;
+  background-color: rgb(184, 93, 93);
+  font-family: 'Montserrat', sans-serif;
+  border: 2px wheat;
+}
+
+.close_b
+{
+  right: 0;
+  float: right;
+  background-color: rgb(181, 194, 63);
+  font-family: 'Montserrat', sans-serif;
+  padding: 2%;
+  border: 2px wheat;
+}
+
+table, th, td {
+text-align: left;
+  padding: 25px;
+}

@@ -12,7 +12,9 @@ const View=({item,search})=>{
       <div>
          {
 filterd.map(item=>(
+   
    <Detail key={item.id} item={item} />
+  
 ))
 }
 </div>

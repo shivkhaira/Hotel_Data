@@ -9,13 +9,14 @@ import {selectCartItems,selectCartItemsQuantity,selectCartItemsPrice} from '../r
 import {createStructuredSelector} from 'reselect'
 import {connect} from 'react-redux'
 import {selectCurrentUser} from '../redux/user/user.selector'
-import {auth,firestore} from '../../firebase/firebase.utils'
-import {Link} from 'react-router-dom'
+import {firestore} from '../../firebase/firebase.utils'
 import {selectCRest} from '../redux/rest/rest.selectors'
 import { useParams } from 'react-router-dom'
 import {clearCart} from '../redux/cart/cart.action'
+import './hotel.style.css'
+import {CSSTransitionGroup} from 'react-transition-group'
 
-const HotelView=({clearCart,cartItems,currentUser,selectCartItemsQuantity,selectCartItemsPrice})=>
+const HotelView=({clearCart,cartItems,selectCartItemsQuantity,selectCartItemsPrice})=>
 {
   const { res_id,t_id } = useParams();
  
@@ -23,7 +24,9 @@ const HotelView=({clearCart,cartItems,currentUser,selectCartItemsQuantity,select
  const [mida,Setmida]=useState()
  const [loading,Setload]=useState(true)
  const [mid,Setmid]=useState(true)
-const [search,Setsearch]=useState('')
+ const [search,Setsearch]=useState('')
+ const [r_name,setRes]=useState('') 
+const [s_cart,Setcart]=useState(false)
 
 const makeid=(length)=> {
   var result           = '';
@@ -63,7 +66,16 @@ else
  }
 
  useEffect(() => {
-   //console.log(match)
+  
+  var docRe = firestore.collection("Rest").where("res_id", "==", res_id)
+  docRe.get().then(function(querySnapshot) {
+     
+      querySnapshot.forEach(function(doc) {
+        setRes(doc.data().name)
+  })
+})
+
+
     let m=[]
     var docRef = firestore.collection("data").where('res_id', '==', res_id)
     docRef.get().then(function(querySnapshot) {
@@ -100,7 +112,8 @@ else
                     items.push({
                       id:doc.data().id,
                       dish: doc.data().dish,
-                      price:doc.data().price
+                      price:doc.data().price,
+                      image:doc.data().image
                     })
                   })
                   return { id: f.id, category: f.category, items }
@@ -119,39 +132,72 @@ else
     Setsearch(e.target.value)
  }
 
+ const show_cart=()=>{
+  Setcart(true)
+ }
+
+ const hide_cart=()=>{
+  Setcart(false)
+ }
+
+ const clear_cart=()=>{
+  clearCart()
+  Setcart(false)
+ }
+
  return(
     
     <div className="shop-page">
-         {
-           <div hidden>
-    currentUser?
-    <button className='option' onClick={()=>auth.signOut()}>SIGN OUT</button>
-    :
-    <Link to='signin'>SIGN IN</Link>
-    </div>
+ 
+      {cartItems.length>0 &&
+<div className="bottom">
+  <CustomButton onClick={show_cart}>(Touch to open)</CustomButton><br />
+
+  Total Items:{selectCartItemsQuantity} - Total Price:{selectCartItemsPrice}
+</div>
 }
-<br />
+<CSSTransitionGroup
+ transitionAppear={true}
+ transitionAppearTimeout={500}
+ transitionEnterTimeout={400}
+ transitionLeaveTimeout={500}
+transitionName="example"
+>
+            {s_cart &&   
+<div className="cart">
+  
+  <div className="text">
+  <h1>Cart Detail</h1>
+    <div className="action">
+{cartItems.length>0 &&  <CustomButton onClick={hide_cart} className="action_c">Close</CustomButton>}
+{cartItems.length>0 &&   <CustomButton type="button" className="action_b" onClick={handle}>Order Now</CustomButton>}
+</div>
 
-{cartItems.length>0 && <CustomButton type="button" onClick={clearCart}>Clear Cart</CustomButton> }
-{cartItems.length>0 &&   <CustomButton type="button" onClick={handle}>Order Now</CustomButton>}
-      
+ {cartItems.length>0 && <CartItems /> }
+ </div>
+ </div>
+}
+</CSSTransitionGroup>
 
-            <CartItems />
-
-            <CustomInput type="text" value={search} onChange={change} />
+ <h1 className="title">{r_name}</h1>
+            <CustomInput className="search" placeholder="Search" type="text" value={search} onChange={change} />
    
+<hr />
+
 
        
        {loading?'Loading':
 
 
         data.map(d=>
-            <div key={d.id}>
+            <div key={d.id} className="block">
             <Title title={d.category} /> 
+           
             <View item={d.items} search={search} />
             </div>
         )
     }
+
 
     </div>
 )

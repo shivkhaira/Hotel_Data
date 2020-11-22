@@ -12,10 +12,6 @@ import {createStructuredSelector} from 'reselect'
 import {auth,createUserProfileDocument} from './firebase/firebase.utils'
 import Logout from './component/login/logout'
 import Rest from './component/rest/rest.component'
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/lib/integration/react';
-import { persistor, store } from './component/redux/store';
-import Load from './component/loading/load.component'
 import Orders from './component/orders/orders.component'
 
 function App(props) {
@@ -57,9 +53,7 @@ useEffect(() => {
 
 
   return (
-    <Provider store={store}>
-    
-    <PersistGate loading={<Load />} persistor={persistor}>
+   
     <Switch>
       <Route exact path="/" render={()=>props.currentUser ? (<Redirect to='/rest' />) :( <Login /> ) } />
       <Route path="/add" exact component={Category} />
@@ -71,8 +65,7 @@ useEffect(() => {
       <Route path="/signin" exact render={()=>props.currentUser ? (<Redirect to='/add' />) :( <Login /> ) } />
       <Route path="/view_orders" exact render={()=>props.currentUser ? (<Orders />) :( <Redirect to='/signin' /> ) } />
    </Switch>
-   </PersistGate>
-    </Provider>
+
   );
 }
 

@@ -55,11 +55,11 @@ const Detail=({item,addItem,clearItem,decItem,cartItems})=>{
 
     return(
         <div key={item.id}>
-        <p>{item.dish}</p>
-        <p>{item.price}</p>
-        {quant===0?<CustomButton key={item.id} onClick={handle} type="button">ADD</CustomButton>:<p><button name="minus" onClick={handle}>-</button> {quant} 
-         <button name="plus" onClick={handle}>+</button></p>}
-        
+        <p>{item.dish} <img src={item.image} className="dish_image" alt="Dish" width="100px" height="100px" /></p>
+        <p><b>$ {item.price}</b></p>
+        <br /><br />
+        {quant===0?<CustomButton key={item.id} onClick={handle} type="button" className="add_b">ADD</CustomButton>:<div className="line"><button name="minus" className="minus_b" onClick={handle}>-</button> <p className="quant">{quant}</p>
+         <button name="plus" className="plus_b" onClick={handle}>+</button></div>}
         </div>
     )
 }

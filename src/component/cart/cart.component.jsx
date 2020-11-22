@@ -7,12 +7,15 @@ import {createStructuredSelector} from 'reselect'
 const CartItems=({cartItems,selectCartItemsPrice,selectCartItemsQuantity})=>{
     return(
     <div>
+         <table>
+             <tbody>
  {cartItems.map(cartItem=>(
-                <div key={cartItem.id}>{cartItem.dish} {cartItem.quantity}</div>
+                <tr key={cartItem.id}><td>{cartItem.dish}</td><td>{cartItem.quantity}x{cartItem.price}</td><td>$ {cartItem.price*cartItem.quantity}</td></tr>
             ))}
+            </tbody></table>
             <h3>Total Items: {selectCartItemsQuantity}</h3>
-<h3>Price: {selectCartItemsPrice}</h3>
-    </div>
+<h3>Price: $ {selectCartItemsPrice}</h3>
+  </div>
     )
 }
 
