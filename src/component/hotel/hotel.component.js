@@ -26,7 +26,10 @@ const HotelView=({clearCart,cartItems,selectCartItemsQuantity,selectCartItemsPri
  const [mid,Setmid]=useState(true)
  const [search,Setsearch]=useState('')
  const [r_name,setRes]=useState('') 
-const [s_cart,Setcart]=useState(false)
+ const [s_cart,Setcart]=useState(false)
+ const [o_bool,setBool]=useState(false)
+ const [o_load,setOLoad]=useState(false)
+
 
 const makeid=(length)=> {
   var result           = '';
@@ -39,17 +42,19 @@ const makeid=(length)=> {
 }
 
  const handle=async()=>{
-
+  var jp_s=makeid(8)
+  
 if (cartItems.length<1)
 {
 alert('Empty Cart')
 }
 else
 {
+
      const datax={
          pending:0,
          time:new Date().toLocaleString(),
-         id:makeid(8),
+         id:jp_s,
          table:t_id,
          res_id:res_id,
          price:selectCartItemsPrice,
@@ -58,9 +63,14 @@ else
          ...cartItems
          }
      }
+     
+     setOLoad(true)
      await createOrder(datax)
-     alert('Order Succesfull')
+     setOLoad(false)
+     setBool(true)
      clearCart()
+     
+     console.log(jp_s)
     }
      
  }
@@ -126,7 +136,7 @@ else
           }
 
     })
-},[mid,mida])
+},[mid,mida,res_id])
 
  const change=(e)=>{
     Setsearch(e.target.value)
@@ -139,11 +149,13 @@ else
  const hide_cart=()=>{
   Setcart(false)
  }
-
+// eslint-disable-next-line
  const clear_cart=()=>{
   clearCart()
   Setcart(false)
  }
+
+
 
  return(
     
@@ -156,28 +168,6 @@ else
   Total Items:{selectCartItemsQuantity} - Total Price:{selectCartItemsPrice}
 </div>
 }
-<CSSTransitionGroup
- transitionAppear={true}
- transitionAppearTimeout={500}
- transitionEnterTimeout={400}
- transitionLeaveTimeout={500}
-transitionName="example"
->
-            {s_cart &&   
-<div className="cart">
-  
-  <div className="text">
-  <h1>Cart Detail</h1>
-    <div className="action">
-{cartItems.length>0 &&  <CustomButton onClick={hide_cart} className="action_c">Close</CustomButton>}
-{cartItems.length>0 &&   <CustomButton type="button" className="action_b" onClick={handle}>Order Now</CustomButton>}
-</div>
-
- {cartItems.length>0 && <CartItems /> }
- </div>
- </div>
-}
-</CSSTransitionGroup>
 
  <h1 className="title">{r_name}</h1>
             <CustomInput className="search" placeholder="Search" type="text" value={search} onChange={change} />
@@ -191,13 +181,62 @@ transitionName="example"
 
         data.map(d=>
             <div key={d.id} className="block">
-            <Title title={d.category} /> 
-           
+            <Title title={d.category} />
             <View item={d.items} search={search} />
             </div>
         )
     }
 
+
+
+<CSSTransitionGroup
+ transitionAppear={true}
+ transitionAppearTimeout={500}
+ transitionEnterTimeout={400}
+ transitionLeaveTimeout={500}
+transitionName="example"
+>
+            {s_cart &&  
+
+<div className={o_load ? "o_load" : "cart" }>
+  
+{o_load ?
+  <div className="text">
+
+<h1>Loading</h1>
+  
+</div>
+:
+o_bool ?
+  
+  <div className="text">
+
+  <h1>Order Placed</h1>
+   
+  <div className="action">
+<CustomButton onClick={hide_cart} className="action_cd">Close</CustomButton>
+</div>
+ </div>
+ :
+ <div className="text">
+
+ <h1>Cart Detail</h1>
+   <div className="action">
+{cartItems.length>0 &&  <CustomButton onClick={hide_cart} className="action_c">Close</CustomButton>}
+{cartItems.length>0 &&   <CustomButton type="button" className="action_b" onClick={handle}>Order Now</CustomButton>}
+   
+</div>
+
+{cartItems.length>0 && <CartItems /> } 
+
+</div>
+
+            }
+ </div>
+}
+
+
+</CSSTransitionGroup>
 
     </div>
 )

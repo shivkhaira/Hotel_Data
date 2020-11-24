@@ -23,7 +23,7 @@ const Detail=({item,addItem,clearItem,decItem,cartItems})=>{
       
       },[quant,cartItems,item])
     const handle=(e)=>{
-      
+        //navigator.vibrate(100)
         if (e.target.name==="plus")
         {
       //  Setquant(quant+1)

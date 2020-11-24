@@ -62,14 +62,14 @@ useEffect(() => {
       <Route path="/add/:name" exact component={Data} />
       <Route path="/logout" exact component={Logout} />
       <Route path="/rest" exact render={()=>props.currentUser ? <Rest /> :( <Login /> ) } />
-      <Route path="/signin" exact render={()=>props.currentUser ? (<Redirect to='/add' />) :( <Login /> ) } />
+      <Route path="/signin" exact render={()=>props.currentUser ? (<Redirect to='/rest' />) :( <Login /> ) } />
       <Route path="/view_orders" exact render={()=>props.currentUser ? (<Orders />) :( <Redirect to='/signin' /> ) } />
    </Switch>
 
   );
 }
 
-const mapStatetoProps=({user})=>createStructuredSelector({
+const mapStatetoProps=()=>createStructuredSelector({
   currentUser:selectCurrentUser
 })
 

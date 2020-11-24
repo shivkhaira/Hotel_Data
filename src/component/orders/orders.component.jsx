@@ -6,6 +6,7 @@ import {firestore} from '../../firebase/firebase.utils'
 import { useState } from 'react'
 import Order from '../order/order.component'
 import CustomButton from '../button/button.component'
+import './orders.style.css'
 
 const Orders=({rest})=>{
 const [mid,setMida]=useState()
@@ -55,7 +56,7 @@ const comp=(e)=>{
      
              
 })
-    },[load])
+    },[load,rest.res_id])
 return(
     <div>
       <h1>Pending Orders</h1>   

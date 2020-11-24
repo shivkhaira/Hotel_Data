@@ -18,7 +18,7 @@ const Data=(props)=>{
    const handleChange = e => {
      if (e.target.name==='image') {
         if (e.target.files[0]) {
-          const image = e.target.files[0];
+          let image = e.target.files[0];
           Setimage(() => (image));
        
         }
@@ -48,9 +48,9 @@ const Data=(props)=>{
      
   const handleUpload = async(e) => {
     e.preventDefault()
-    const id=makeid(8)
-    const image_name=makeid(10)+image.name
-    const uploadTask = storage.ref(`images/${image_name}`).put(image);
+    let id=makeid(8)
+    let image_name=makeid(10)+image.name
+    let uploadTask = storage.ref(`images/${image_name}`).put(image);
     uploadTask.on(
       "state_changed",
       snapshot => {
