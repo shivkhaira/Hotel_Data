@@ -54,10 +54,11 @@ const handleChange=event=>{
     return(
        <div>
            {
+               
     currentUser?
     <div className='option' onClick={()=>auth.signOut()}>SIGN OUT</div>
     :
-    <Link to='signin'>SIGN IN</Link>
+    <Link to='login'>SIGN IN</Link>
 }
              <form onSubmit={handle}>
                 <CustomInput label="Email" type="email" name="email" value={email} onChange={handleChange} required />
@@ -71,7 +72,7 @@ const handleChange=event=>{
     )
 }
 
-const maptoStatetoProps=(state)=>createStructuredSelector({
+const maptoStatetoProps=()=>createStructuredSelector({
     currentUser:selectCurrentUser
 })
 

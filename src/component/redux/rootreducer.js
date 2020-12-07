@@ -8,5 +8,5 @@ export default combineReducers({
    cart:CartReducer,
    user:userReducer,
    rest:RestReducer,
-   cust:CustReducer
+   customer:CustReducer
 })

@@ -8,10 +8,10 @@ const CustReducer=(state=INITIAL_STATE,action)=>{
     switch(action.type)
     {
        
-        case 'ADD_CUST':
+        case 'ADD_CUSTOMER':
             return{
                 ...state,
-                rest:action.payload
+                customer:action.payload
             }
                
          default:

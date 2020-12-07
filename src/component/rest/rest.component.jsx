@@ -70,7 +70,9 @@ else
 {
     return(
         <div><Link to="/add">{r}</Link><br />
-        <Link to='/view_orders'>View Orders</Link></div>
+        <Link to='/view_orders'>View Orders</Link><br />        
+        <Link to='/logout'>Logout</Link>
+        </div>
     )
 }
 }

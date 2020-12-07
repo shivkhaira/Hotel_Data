@@ -13,12 +13,15 @@ import {auth,createUserProfileDocument} from './firebase/firebase.utils'
 import Logout from './component/login/logout'
 import Rest from './component/rest/rest.component'
 import Orders from './component/orders/orders.component'
+import Loading from './component/loading/loading.component'
+import Customer from './component/customer/customer.component'
+import {selectCustomer} from './component/redux/customer/cust.selectors'
 
 function App(props) {
 
 
   var unsubscribeFromAuth=null
-  const {setCurrentUser}=props
+  const {setCurrentUser,selectCustomer}=props
 
 useEffect(() => {
     
@@ -51,26 +54,32 @@ useEffect(() => {
 
 
 
-
   return (
    
     <Switch>
       <Route exact path="/" render={()=>props.currentUser ? (<Redirect to='/rest' />) :( <Login /> ) } />
       <Route path="/add" exact component={Category} />
+      <Route path="/load" exact component={Loading} />
       <Route path="/list" exact component={List} />
-      <Route path="/view/:res_id/:t_id" exact component={HotelView} />
+
+ 
+  <Route path="/view/:res_id/:t_id/done" exact >{selectCustomer?<HotelView />: <Customer />}</Route>
+ 
+  <Route path="/view/:res_id/:t_id" exact ><Customer /></Route>
+    
       <Route path="/add/:name" exact component={Data} />
-      <Route path="/logout" exact component={Logout} />
-      <Route path="/rest" exact render={()=>props.currentUser ? <Rest /> :( <Login /> ) } />
-      <Route path="/signin" exact render={()=>props.currentUser ? (<Redirect to='/rest' />) :( <Login /> ) } />
-      <Route path="/view_orders" exact render={()=>props.currentUser ? (<Orders />) :( <Redirect to='/signin' /> ) } />
+      <Route path="/logout" exact render={()=>props.currentUser ? <Logout /> :( <Redirect to='/login' /> )} />
+      <Route path="/rest" exact render={()=>props.currentUser ? <Rest /> :(<Redirect to='/login' /> ) } />
+      <Route path="/login" exact render={()=>props.currentUser ? (<Redirect to='/rest' />) :( <Login /> ) } />
+      <Route path="/view_orders" exact render={()=>props.currentUser ? (<Orders />) :( <Redirect to='/login' /> ) } />
    </Switch>
 
   );
 }
 
 const mapStatetoProps=()=>createStructuredSelector({
-  currentUser:selectCurrentUser
+  currentUser:selectCurrentUser,
+  selectCustomer:selectCustomer
 })
 
 const maptoDispatchtoProps=dispatch=>({

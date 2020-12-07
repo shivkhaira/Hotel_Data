@@ -14,7 +14,7 @@ import {selectCRest} from '../redux/rest/rest.selectors'
 import { useParams } from 'react-router-dom'
 import {clearCart} from '../redux/cart/cart.action'
 import './hotel.style.css'
-import {CSSTransitionGroup} from 'react-transition-group'
+import { TransitionGroup} from 'react-transition-group'
 
 const HotelView=({clearCart,cartItems,selectCartItemsQuantity,selectCartItemsPrice})=>
 {
@@ -189,7 +189,7 @@ else
 
 
 
-<CSSTransitionGroup
+<TransitionGroup
  transitionAppear={true}
  transitionAppearTimeout={500}
  transitionEnterTimeout={400}
@@ -236,7 +236,7 @@ o_bool ?
 }
 
 
-</CSSTransitionGroup>
+</TransitionGroup>
 
     </div>
 )
