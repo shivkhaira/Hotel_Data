@@ -99,7 +99,15 @@ body
   left:0px;
   bottom:0px;
   width:100%;
-  background:rgb(63, 73, 160);
+  background:rgb(58, 58, 58);
+  color: white;
+  height: 8vh;
+ 
+}
+
+.bottom p{
+ 
+  font-size: small;
 }
 
 .cart {
@@ -110,9 +118,11 @@ body
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: black;
+    background-color: blanchedalmond;
+    overflow-y: scroll;
     z-index: 2;
     cursor: pointer;
+    padding-bottom: 20%;
 }
 
 .text {
@@ -223,4 +233,28 @@ text-align: center;
   background-color: rgb(184, 93, 93);
   font-family: 'Montserrat', sans-serif;
   border: 2px wheat;
+}
+
+.select
+{
+  width: 100%;
+  padding: 5%;
+  font-size: medium;
+  border: medium double black;
+  font-family: 'Open Sans', sans-serif;
+  background-color: blanchedalmond;
+}
+
+.selectp
+{
+  width: 100%;
+  padding: 5%;
+  font-size: medium;
+  border: medium double black;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.width{
+  width: 100%;
+  height: 10vh;
 }

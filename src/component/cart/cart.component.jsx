@@ -2,19 +2,25 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {selectCartItems,selectCartItemsPrice,selectCartItemsQuantity} from '../redux/cart/cart.selectors'
 import {createStructuredSelector} from 'reselect'
-
+import './cart.style.css'
 
 const CartItems=({cartItems,selectCartItemsPrice,selectCartItemsQuantity})=>{
+
+   
     return(
     <div>
-         <table>
-             <tbody>
+        
  {cartItems.map(cartItem=>(
-                <tr key={cartItem.id}><td>{cartItem.dish}</td><td>{cartItem.quantity}x{cartItem.price}</td><td>$ {cartItem.price*cartItem.quantity}</td></tr>
+               <div className="bold" key={cartItem.id}>
+       <div className="leftbox">{cartItem.dish}</div>      <div className="middlebox">{cartItem.quantity}x{cartItem.price}</div>
+         <div className="rightbox">
+             $ {cartItem.price*cartItem.quantity}</div>
+        </div>
             ))}
-            </tbody></table>
-            <h3>Total Items: {selectCartItemsQuantity}</h3>
-<h3>Price: $ {selectCartItemsPrice}</h3>
+          <br />
+          <div className="detail_pane">  <h4>Total Items: {selectCartItemsQuantity}</h4>
+<h4>Price: $ {selectCartItemsPrice}</h4></div>
+
   </div>
     )
 }

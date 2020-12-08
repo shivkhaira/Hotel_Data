@@ -2,7 +2,6 @@ import React, { useState,useEffect } from 'react'
 import Title from './hotel.title'
 import View from './item.view'
 import CartItems from '../cart/cart.component'
-import CustomButton from '../button/button.component'
 import CustomInput from '../input/customInput.component'
 import {createOrder} from '../../firebase/firebase.utils'
 import {selectCartItems,selectCartItemsQuantity,selectCartItemsPrice} from '../redux/cart/cart.selectors'
@@ -14,7 +13,10 @@ import {selectCRest} from '../redux/rest/rest.selectors'
 import { useParams } from 'react-router-dom'
 import {clearCart} from '../redux/cart/cart.action'
 import './hotel.style.css'
-import { TransitionGroup} from 'react-transition-group'
+import Card from '../../shared/Card'
+import Button from '../../shared/Button'
+import Modal from '../../shared/Modal'
+import Payment from '../payment/payment.component'
 
 const HotelView=({clearCart,cartItems,selectCartItemsQuantity,selectCartItemsPrice})=>
 {
@@ -30,6 +32,7 @@ const HotelView=({clearCart,cartItems,selectCartItemsQuantity,selectCartItemsPri
  const [o_bool,setBool]=useState(false)
  const [o_load,setOLoad]=useState(false)
 
+ const [openPaypal,setOpenPaypal]=useState(false)
 
 const makeid=(length)=> {
   var result           = '';
@@ -42,8 +45,8 @@ const makeid=(length)=> {
 }
 
  const handle=async()=>{
+
   var jp_s=makeid(8)
-  
 if (cartItems.length<1)
 {
 alert('Empty Cart')
@@ -54,6 +57,7 @@ else
      const datax={
          pending:0,
          time:new Date().toLocaleString(),
+         dine_option:opt,
          id:jp_s,
          table:t_id,
          res_id:res_id,
@@ -72,7 +76,8 @@ else
      
      console.log(jp_s)
     }
-     
+   
+  
  }
 
  useEffect(() => {
@@ -152,26 +157,67 @@ else
 // eslint-disable-next-line
  const clear_cart=()=>{
   clearCart()
-  Setcart(false)
  }
 
+ const Paypal=()=>{
+  hide_cart()
+  setOpenPaypal(true)
+ }
 
+ const [opt,setOpt]=useState("null")
+const [option,setOption]=useState(true)
+    const changex=(e)=>{
+        setOpt(e.target.value)
+     
+        if(e.target.value==="null")
+        {
+          setOption(true)
+        }
+        else
+        {
+          if (payment!=="null")
+        {
+          setOption(false)
+        }
+        }
+    }
+    const [payment,setPayment]=useState("null")
+    const changep=(e)=>{
+      setPayment(e.target.value)
+      if(e.target.value==="null")
+      {
+        setOption(true)
+      }
+      else
+      {
+        if (opt!=="null")
+        {
+        
+        setOption(false)
+      }
+      }
+  }
 
- return(
-    
-    <div className="shop-page">
  
-      {cartItems.length>0 &&
-<div className="bottom">
-  <CustomButton onClick={show_cart}>(Touch to open)</CustomButton><br />
+ return(
+    <Card>
+         {cartItems.length>0 &&
+<div className="bottom center">
 
-  Total Items:{selectCartItemsQuantity} - Total Price:{selectCartItemsPrice}
+  <Button onClick={show_cart}>View Cart</Button>
+  <Button onClick={clear_cart} danger>Clear Cart</Button>
+{/*
+Total Items:{selectCartItemsQuantity} - Total Price:{selectCartItemsPrice}</p>
+*/}
+
 </div>
 }
+    <div className="shop-page">
+ 
+   
 
  <h1 className="title">{r_name}</h1>
             <CustomInput className="search" placeholder="Search" type="text" value={search} onChange={change} />
-   
 <hr />
 
 
@@ -189,56 +235,62 @@ else
 
 
 
-<TransitionGroup
- transitionAppear={true}
- transitionAppearTimeout={500}
- transitionEnterTimeout={400}
- transitionLeaveTimeout={500}
-transitionName="example"
->
-            {s_cart &&  
+{openPaypal &&
+<div className="cart">
+   <Payment price={selectCartItemsPrice} name={r_name} description={`Payment through PayPal for ${r_name}`} />
 
-<div className={o_load ? "o_load" : "cart" }>
-  
-{o_load ?
-  <div className="text">
-
-<h1>Loading</h1>
-  
-</div>
-:
-o_bool ?
-  
-  <div className="text">
-
-  <h1>Order Placed</h1>
-   
-  <div className="action">
-<CustomButton onClick={hide_cart} className="action_cd">Close</CustomButton>
-</div>
- </div>
- :
- <div className="text">
-
- <h1>Cart Detail</h1>
-   <div className="action">
-{cartItems.length>0 &&  <CustomButton onClick={hide_cart} className="action_c">Close</CustomButton>}
-{cartItems.length>0 &&   <CustomButton type="button" className="action_b" onClick={handle}>Order Now</CustomButton>}
-   
-</div>
-
-{cartItems.length>0 && <CartItems /> } 
+<Button onClick={()=>setOpenPaypal(false)} style={{zIndex:200}} className="width bottom center">Close</Button>
 
 </div>
-
-            }
- </div>
 }
 
+<Modal
+ show={s_cart}
+ header="Cart Details"
+ onCancel={hide_cart}
+ contentClass="place-item__modal-content"
+ footerClass="place-item__modal-actions"
+ footer={
+   <React.Fragment>
+     <Button onClick={hide_cart} inverse>Close</Button>
+     <Button onClick={payment==="online"?Paypal:handle} disabled={option}>Order</Button>
+   </React.Fragment>
+ }
+>
+  {o_load ? <div className="center bold"><h2>SENDING YOUR ORDER.... PLEASE WAIT!</h2></div> : <React.Fragment><CartItems /><div className="detail_pane">
+<select onChange={changex} className="select">
+    <option value="null">
+        Select Delivery Option
+    </option>
 
-</TransitionGroup>
+    <option value="dine-in">
+        Dine-In
+    </option>
+
+    <option value="take-away">
+    Take-Away
+    </option>
+</select>
+<select className="selectp" onChange={changep}>
+
+    <option value="null">
+        Select Payment Option
+    </option>
+
+    <option value="online">
+        PayPal
+    </option>
+
+    <option value="offline">
+    Offline Payment
+    </option>
+</select>
+</div></React.Fragment> }
+
+</Modal>
 
     </div>
+    </Card>
 )
 
 }

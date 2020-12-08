@@ -1,0 +1,30 @@
+.bold{
+    display: flex;
+    margin-top: 5vh;
+}
+
+table{
+    text-align: left;
+}
+
+.leftbox { 
+   
+   font-weight: bold;
+    width:30%; 
+    margin-left: 5%;
+   
+} 
+.middlebox{ 
+    
+   
+    width:30%; 
+   
+} 
+.rightbox{ 
+    flex-grow: 1;
+    font-weight: bold;
+} 
+
+.detail_pane{
+    text-align: left;
+}
