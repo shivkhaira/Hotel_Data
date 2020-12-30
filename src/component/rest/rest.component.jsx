@@ -7,19 +7,27 @@ import {selectCurrentUser} from '../redux/user/user.selector'
 import {firestore,addRest} from '../../firebase/firebase.utils'
 import { useState } from 'react'
 import {setRest} from '../redux/rest/rest.action'
-import { Link } from 'react-router-dom'
+import { v4 as uuidv4 } from 'uuid';
+import LoadingSpinner from '../LoadSpin/loading'
+import Card from '../../shared/Card'
+import './res.style.css'
+import Admin from '../admin_view/admin.component'
 
 const Rest=({currentUser,setRest})=>{
 
   
-const[r,setR]=useState(0)
+const[r,setR]=useState('')
+const [exist,setExist]=useState(5)
 const [name,setName]=useState('')
 const [c,setC]=useState(0)
+const [loading,setLoading]=useState(true)
+
     const handle=(e)=>{
         setName(e.target.value)
     }
 
-    const click=()=>{
+    const click=async()=>{
+        setLoading(true)
         if (name==='')
         {
             alert("Empty Name")
@@ -27,54 +35,61 @@ const [c,setC]=useState(0)
         }
         else
         {
-            var id=makeid(6)
-            addRest(id,name,currentUser)
+            var id=uuidv4()
+            await addRest(id,name,currentUser)
             setC(1)
         }
+        setLoading(false)
     }
     
-    const makeid=(length)=> {
-        var result           = '';
-        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var charactersLength = characters.length;
-        for ( var i = 0; i < length; i++ ) {
-           result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        }
-        return result;
-     }
 
     useEffect(() => {
-    
-        var docRef = firestore.collection("Rest").where("currentUser", "==", currentUser)
-        docRef.get().then(function(querySnapshot) {
-           
-            querySnapshot.forEach(function(doc) {
-               setR(doc.data().name)
-               setRest(doc.data())
-        })
-    })
-        
+      
+        setLoading(true)
+        var docRef = firestore.collection("Rest").doc(currentUser.id);
+
+        docRef.get().then(function(doc) {
+            if (doc.exists) {
+                
+                setR(doc.data().name)
+                setRest(doc.data())
+                setExist(true)
+            } else {
+                // doc.data() will be undefined in this case
+                setExist(false)
+            }
+        }).catch(function(error) {
+            console.log("Error getting document:", error);
+        });
+    setLoading(false)
+
     },[currentUser,c,setRest])
 
+if (exist===5)
+{
+    return(
+        <LoadingSpinner asOverlay />
+    )
+}
 
-if (r===0)
-{
+  
     return(
-        <div>
-      <CustomInput type="text" name="name" onChange={handle} placeholder="Restaurant Name" value={name} />
-      <CustomButton type="button" name="name" onClick={click} >Submit</CustomButton>
-        </div>
+        
+        <React.Fragment>
+            {!exist?
+             <React.Fragment>
+         <Card className="wholef"> 
+        <h1 className="center">Add a Restaraunt</h1>
+      <CustomInput type="text" name="name" className="res_name" onChange={handle} placeholder="Restaurant Name" value={name} required/><br />
+      <CustomButton type="button" name="name" className="res_button" onClick={click} >Submit</CustomButton>
+        </Card>
+        {loading && <LoadingSpinner asOverlay />}
+        </React.Fragment>
+            :<Admin name={r} />}
+        </React.Fragment>
     )
-}
-else
-{
-    return(
-        <div><Link to="/add">{r}</Link><br />
-        <Link to='/view_orders'>View Orders</Link><br />        
-        <Link to='/logout'>Logout</Link>
-        </div>
-    )
-}
+
+
 }
 const maptoporps=()=>createStructuredSelector({
     currentUser:selectCurrentUser

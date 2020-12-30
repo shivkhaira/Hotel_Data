@@ -45,9 +45,10 @@ export const createOrder=async(order)=>{
    
    }
    
-   export const addCategory=async(category,currentUser,res_id)=>{
+   export const addCategory=async(id,category,currentUser,res_id)=>{
      
-    await firestore.collection("data").doc().set({
+    await firestore.collection("data").doc(id).set({
+      id,
        category,
        res_id,
       currentUser 
@@ -63,7 +64,7 @@ export const createOrder=async(order)=>{
 
 export const addRest=async(res_id,name,currentUser)=>{
      
-  await firestore.collection("Rest").doc().set({
+  await firestore.collection("Rest").doc(currentUser.id).set({
     res_id,
      name,
     currentUser 
@@ -77,16 +78,18 @@ export const addRest=async(res_id,name,currentUser)=>{
 
 }
 
-export const addDish=async(id,category,currentUser,dish,price,url,res_id)=>{
+export const addDish=async(id,category,currentUser,dish,price,url,res_id,catName,time)=>{
      
-  await firestore.collection("Dish").doc().set({
+  await firestore.collection("Dish").doc(id).set({
     'id':id,
-     'category':category,
+     'category_id':category,
     'currentUser':currentUser,
     'dish':dish,
     'price':price,
     'image':url,
-    'res_id':res_id
+    'res_id':res_id,
+    'category':catName,
+    'time':time
   
   })
   .then(function() {

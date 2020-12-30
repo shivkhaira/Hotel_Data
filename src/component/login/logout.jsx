@@ -5,11 +5,12 @@ import {selectCurrentUser} from '../redux/user/user.selector'
 import { useEffect } from 'react'
 import {connect} from 'react-redux'
 import {createStructuredSelector} from 'reselect'
+import {clearRest} from '../redux/rest/rest.action'
 
 const Logout=({currentUser})=>{
     useEffect(()=>{
         auth.signOut()
-        auth.signOut()
+        
     },[])
   if(currentUser)
   {
@@ -27,4 +28,8 @@ const maptoStatetoProps=()=>createStructuredSelector({
     currentUser:selectCurrentUser
 })
 
-export default connect(maptoStatetoProps)(Logout)
+const maptoDispatchtoProps=dispatch=>({
+    clearRest:rest=>dispatch(clearRest())
+  })
+
+export default connect(maptoStatetoProps,maptoDispatchtoProps)(Logout)

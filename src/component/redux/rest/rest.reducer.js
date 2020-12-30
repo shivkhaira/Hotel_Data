@@ -13,6 +13,12 @@ const RestReducer=(state=INITIAL_STATE,action)=>{
                 ...state,
                 rest:action.payload
             }
+
+        case 'CLEAR_REST':
+                return{
+                    ...state,
+                    rest:null
+                }
                
          default:
                 return state

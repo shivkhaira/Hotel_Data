@@ -1,0 +1,153 @@
+.full_o{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 99%;
+    overflow-y:scroll;
+    height: 100%;
+}
+
+.rest_name{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 1.8rem;
+    text-decoration: underline;
+}
+
+.phead{
+display: inline;
+}
+
+.pending{
+    width: 55%;
+    border: 1px solid;
+    height: 100%;
+    overflow-y:scroll;
+    float: left;
+}
+
+.pendingr{
+    width: 45%;
+    border: 1px solid;
+    height: 100%;
+    overflow-y:scroll;
+    float: right;
+}
+.right{
+    font-size: 1.3rem;
+    font-weight: lighter;
+}
+
+.oder{
+    display: block;
+    text-align: center;
+    margin-top: 50%;
+    font-size: 2rem;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bolder;
+}
+
+.e_class{
+    text-align: left; 
+}
+
+.titles{
+    display: flex;
+    justify-content: space-between;
+    padding-left: 5%;
+    
+    animation-name: exampled;
+    animation-duration: 2s;
+}
+
+@keyframes exampled {
+    from {background-color: red;}
+    to {background-color: white;}
+  }
+
+.tid{
+    font-size: 1.2rem;
+   display: inline;
+    text-align: left;
+    font-weight: bolder;
+}
+
+.tidi{
+    font-size: 1.2rem;
+    display: inline;
+   text-align: right;
+}
+
+.topd
+{
+    display: flex;
+    justify-content: space-between;
+
+}
+
+ul{
+    list-style: none;
+    display: flex;
+    justify-self:end;
+}
+li{
+    margin-right: 5%;
+}
+
+.add_bb
+{   width: 15vh;
+    height: 5vh;
+}
+
+.add_i{
+    height: 4vh;
+    width: 30vh;
+    display: inline;
+    text-align: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.menu_image
+{
+ flex: right;
+}
+
+.item_e{
+    display: flex;
+    justify-content: space-between;
+}
+
+.item_e1{
+  align-items: center;
+  justify-content: center;
+}
+
+.e_classs{
+    background-color: antiquewhite;
+}
+.e_classs:hover{
+    opacity: 0.9;
+}
+
+.small_sub
+{
+    width: 3vh;
+    display: inline-block;
+    background-color: red;
+    color: white;
+   border-radius: 70%;
+   text-align: center;
+   cursor: pointer;
+}
+
+.add_dishi
+{
+    margin: 5%;
+}
+
+.add_dishi input
+{
+    height: 5vh;
+    font-size: 1.2rem;
+    width: 100%;
+}

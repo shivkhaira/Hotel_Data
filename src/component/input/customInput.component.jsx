@@ -1,10 +1,10 @@
 import React from 'react'
 
-const CustomInput=({...oprops})=>{
+const CustomInput=({...props})=>{
 
     return(
 <div>
-    <input {...oprops} />
+    <input {...props} />
 </div>
     )
 }

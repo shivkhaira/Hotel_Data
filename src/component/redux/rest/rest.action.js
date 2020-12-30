@@ -3,3 +3,8 @@ export const setRest=rest=>({
     payload:rest
 })
 
+
+export const clearRest=()=>({
+    type:'CLEAR_REST'
+})
+

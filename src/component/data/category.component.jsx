@@ -1,13 +1,15 @@
 import React, { useState,useEffect } from 'react'
-import CustomInput from '../input/customInput.component'
-import CustomButton from '../button/button.component'
 import {addCategory} from '../../firebase/firebase.utils'
 import {firestore} from '../../firebase/firebase.utils'
-import { Link } from 'react-router-dom'
 import {createStructuredSelector} from 'reselect'
 import {connect} from 'react-redux'
 import {selectCurrentUser} from '../redux/user/user.selector'
 import {selectCRest} from '../redux/rest/rest.selectors'
+import { v4 as uuidv4 } from 'uuid'
+import LoadingSpinner from '../LoadSpin/loading'
+import Button from '../../shared/Button'
+import Menu from '../../component/menu/menu.component';
+
 
 const Category=({currentUser,rest})=>{
     const[cat,Setcat]=useState('')
@@ -22,7 +24,8 @@ const Category=({currentUser,rest})=>{
             querySnapshot.forEach(function(doc) {
                 m.push({
                     id:doc.id,
-                    category:doc.data().category
+                    category:doc.data().category,
+                    dish_id:doc.data().id
                 })
             });
             set(m)
@@ -34,22 +37,24 @@ const Category=({currentUser,rest})=>{
         Setcat(e.target.value)
     }
     const handle=()=>{
+        var idp=uuidv4()
         Setload(true)
-        addCategory(cat,currentUser,rest.res_id)
+        addCategory(idp,cat,currentUser,rest.res_id)
         Setcat('')
     }
+  
     return (
 <div>
-    {rest.name}
-<CustomInput type="text" onChange={change} value={cat} name="category" />
-         <CustomButton type="button" onClick={handle}>Add</CustomButton>
+    {loading && <LoadingSpinner asOverlay />}
+    <div style={{textAlign:'center'}}>
+  <label htmlFor="cat_name" style={{display:'inline',fontWeight:'bold'}}>Add Category: <input type="text" placeholder="Category Name" id="cat_name" onChange={change} className="form-control add_i" value={cat} name="category" />&nbsp;
+  <Button type="button" onClick={handle} className="add_bb" disabled={cat==='' ? true : false}>Add</Button>
+</label>
+        
+         </div>
     <hr />
     {
-     loading ?<p>Loading</p> : data.map(d=><p key={d.id}>{d.category}
-     
-     
-     <Link to={`${'add/'+d.category}`}>Add</Link>  
-     </p>)
+     loading ?<p>Loading</p> : data.map(d=><Menu key={d.id} d={d} />)
   }
 </div>
     )

@@ -9,6 +9,7 @@ import {createStructuredSelector} from 'reselect'
 import {connect} from 'react-redux'
 import {selectCurrentUser} from '../redux/user/user.selector'
 import {firestore} from '../../firebase/firebase.utils'
+import firebase from '../../firebase/firebase.utils'
 import {selectCRest} from '../redux/rest/rest.selectors'
 import { useParams } from 'react-router-dom'
 import {clearCart} from '../redux/cart/cart.action'
@@ -17,6 +18,8 @@ import Card from '../../shared/Card'
 import Button from '../../shared/Button'
 import Modal from '../../shared/Modal'
 import Payment from '../payment/payment.component'
+import { v4 as uuidv4 } from 'uuid'
+import LoadingSpinner from '../LoadSpin/loading'
 
 const HotelView=({clearCart,cartItems,selectCartItemsQuantity,selectCartItemsPrice})=>
 {
@@ -29,35 +32,65 @@ const HotelView=({clearCart,cartItems,selectCartItemsQuantity,selectCartItemsPri
  const [search,Setsearch]=useState('')
  const [r_name,setRes]=useState('') 
  const [s_cart,Setcart]=useState(false)
- const [o_bool,setBool]=useState(false)
  const [o_load,setOLoad]=useState(false)
-
  const [openPaypal,setOpenPaypal]=useState(false)
 
-const makeid=(length)=> {
-  var result           = '';
-  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  var charactersLength = characters.length;
-  for ( var i = 0; i < length; i++ ) {
-     result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-}
 
- const handle=async()=>{
 
-  var jp_s=makeid(8)
+
+const OnlineHandler=async()=>{
+  
+  var jp_s=uuidv4()
 if (cartItems.length<1)
 {
 alert('Empty Cart')
 }
 else
 {
-
+  var myTimestamp = firebase.firestore.Timestamp.fromDate(new Date());
      const datax={
          pending:0,
-         time:new Date().toLocaleString(),
+         time:myTimestamp,
          dine_option:opt,
+         payment_option:"PayPal",
+         id:jp_s,
+         table:t_id,
+         res_id:res_id,
+         price:selectCartItemsPrice,
+         quantity:selectCartItemsQuantity,
+         data:{
+         ...cartItems
+         }
+     }
+     
+     //setOLoad(true)
+     await createOrder(datax)
+    // setOLoad(false)
+    
+     clearCart()
+     
+     console.log(jp_s)
+    }
+   
+  
+ }
+
+
+ const handle=async()=>{
+
+  var jp_s=uuidv4()
+if (cartItems.length<1)
+{
+alert('Empty Cart')
+}
+else
+{
+  var myTimestamp = firebase.firestore.Timestamp.fromDate(new Date());
+     const datax={
+         pending:0,
+         time:myTimestamp,
+         dine_option:opt,
+         payment_option:"Offline",
          id:jp_s,
          table:t_id,
          res_id:res_id,
@@ -71,7 +104,7 @@ else
      setOLoad(true)
      await createOrder(datax)
      setOLoad(false)
-     setBool(true)
+   
      clearCart()
      
      console.log(jp_s)
@@ -100,6 +133,7 @@ else
             m.push({
                 id:doc.id,
                 category:doc.data().category,
+                category_id:doc.data().id
                
             })
         })
@@ -120,7 +154,7 @@ else
                 let items = []
                 var docRef = firestore
                   .collection('Dish')
-                  .where('category', '==', f.category)
+                  .where('category_id', '==', f.category_id)
                   .where('res_id', '==', res_id)
                 return docRef.get().then(function(querySnapshot) {
                   querySnapshot.forEach(function(doc) {
@@ -141,7 +175,10 @@ else
           }
 
     })
+
+   
 },[mid,mida,res_id])
+
 
  const change=(e)=>{
     Setsearch(e.target.value)
@@ -153,6 +190,9 @@ else
 
  const hide_cart=()=>{
   Setcart(false)
+  setOpt("null")
+  setPayment("null")
+  setOption(true)
  }
 // eslint-disable-next-line
  const clear_cart=()=>{
@@ -201,6 +241,7 @@ const [option,setOption]=useState(true)
  
  return(
     <Card>
+              { loading && <LoadingSpinner asOverlay /> }
          {cartItems.length>0 &&
 <div className="bottom center">
 
@@ -228,7 +269,7 @@ Total Items:{selectCartItemsQuantity} - Total Price:{selectCartItemsPrice}</p>
         data.map(d=>
             <div key={d.id} className="block">
             <Title title={d.category} />
-            <View item={d.items} search={search} />
+            <View item={d.items} search={search} className="dish_image" />
             </div>
         )
     }
@@ -237,7 +278,7 @@ Total Items:{selectCartItemsQuantity} - Total Price:{selectCartItemsPrice}</p>
 
 {openPaypal &&
 <div className="cart">
-   <Payment price={selectCartItemsPrice} name={r_name} description={`Payment through PayPal for ${r_name}`} />
+   <Payment price={selectCartItemsPrice} makeOrder={OnlineHandler} name={r_name} description={`Payment through PayPal for ${r_name}`} />
 
 <Button onClick={()=>setOpenPaypal(false)} style={{zIndex:200}} className="width bottom center">Close</Button>
 
@@ -258,7 +299,7 @@ Total Items:{selectCartItemsQuantity} - Total Price:{selectCartItemsPrice}</p>
  }
 >
   {o_load ? <div className="center bold"><h2>SENDING YOUR ORDER.... PLEASE WAIT!</h2></div> : <React.Fragment><CartItems /><div className="detail_pane">
-<select onChange={changex} className="select">
+<select onChange={changex} className="select" autoFocus={true}>
     <option value="null">
         Select Delivery Option
     </option>

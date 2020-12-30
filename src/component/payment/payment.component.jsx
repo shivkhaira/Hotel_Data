@@ -1,10 +1,13 @@
 
 import React, { useState, useRef, useEffect } from 'react';
+
 import './payments.style.css'
-function Product({ product }) {
+function Product(props) {
     const [paidFor, setPaidFor] = useState(false);
     const [error, setError] = useState(null);
     const paypalRef = useRef();
+    const {product,makeOrder}=props
+
   
     useEffect(() => {
       window.paypal
@@ -25,8 +28,9 @@ function Product({ product }) {
           },
           onApprove: async (data, actions) => {
             const order = await actions.order.capture();
-            setPaidFor(true);
             console.log(order);
+            setPaidFor(true);
+           
           },
           onError: err => {
             setError(err);
@@ -35,11 +39,20 @@ function Product({ product }) {
         })
         .render(paypalRef.current);
     }, [product.description, product.price]);
+
+    useEffect(()=>{
+      if (paidFor)
+      {
+      makeOrder()
+      }
+       // eslint-disable-next-line
+    },[paidFor])
   
     if (paidFor) {
+     
       return (
         <div>
-          <h1>Congrats, you just bought {product.name}!</h1>
+          <h1>Congrats, you just bought {product.name}! </h1>
         </div>
       );
     }
@@ -57,15 +70,18 @@ function Product({ product }) {
   }
   
   function Payment(props) {
+    const [price]=useState(props.price)
+    const [name]=useState(props.name)
+    const [description]=useState(props.description)
     const product = {
-      price:props.price,
-      name: props.name,
-      description: props.description
+      price:price,
+      name: name,
+      description: description
     };
-  
+    
     return (
       <div className="center">
-        <Product product={product} />
+        <Product makeOrder={props.makeOrder} product={product} />
       </div>
     );
   }

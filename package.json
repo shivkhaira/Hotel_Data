@@ -8,6 +8,8 @@
     "@testing-library/user-event": "^7.1.2",
     "create-react-app": "^3.4.1",
     "firebase": "^7.23.0",
+    "firebaseui": "^4.7.1",
+    "moment": "^2.29.1",
     "randomstring": "^1.1.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -20,7 +22,9 @@
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
     "redux-persist": "^6.0.0",
-    "reselect": "^4.0.0"
+    "reselect": "^4.0.0",
+    "styled-components": "^5.2.1",
+    "uuid": "^8.3.2"
   },
   "scripts": {
     "start": "react-scripts start",
