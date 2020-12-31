@@ -37,7 +37,10 @@ const Menu=({d})=>{
        
     });
 
-        
+        return ()=>{
+            setDish()
+            setLoading(false)
+        }
       
     },[loading,d.dish_id])
 

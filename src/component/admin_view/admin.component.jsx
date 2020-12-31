@@ -6,8 +6,10 @@ import {connect} from 'react-redux'
 import LoadingSpinner from '../../component/LoadSpin/loading'
 import {firestore} from '../../firebase/firebase.utils'
 import Orders from '../../component/orders/orders.component'
-import {Link} from 'react-router-dom'
 import Category from '../../component/data/category.component'
+import QrCode from 'react.qrcode.generator'
+import Modal from '../../shared/Modal'
+import Button from '../../shared/Button'
 
 import './admin.style.css'
 const Admin=props=>{
@@ -16,9 +18,10 @@ const Admin=props=>{
     const [order,setOrder]=useState(0)
     const [loading,setLoading]=useState(true)
     const [pend,setPend]=useState(0)
-    
+    const [showQR,setQR]=useState(false)
+    const [tableN,setTable]=useState('')
+    const [image,setImage]=useState(false)
 
-    
 const comp=(e)=>{
     var o_id=e.target.name
     setLoading(true)
@@ -68,14 +71,45 @@ const comp=(e)=>{
 })
    },[props.rest.res_id])
 
+const genQR=(e)=>{
+    setImage(false)
+e.preventDefault()
+if(tableN==='')
+{
+    alert("Enter Table Number")
+   return 0
+}
+setImage(true)
+}
+
     return(
         <React.Fragment>
+                          <Modal
+ show={showQR}
+ header="Generate QR Code"
+ onSubmit={genQR}
+ onCancel={()=>setQR(false)}
+ contentClass="place-item__modal-content"
+ footerClass="place-item__modal-actions"
+ footer={
+   <React.Fragment>
+     <Button onClick={()=>setQR(false)} type="button" inverse>Close</Button>
+     <Button onClick={()=>{}} type="submit">Generate</Button>
+   </React.Fragment>
+ }
+>
+    <div className="add_dishi">
+        {image && <QrCode value={`https://crown-db-98bb2.firebaseapp.com/view/${props.rest.res_id}/${tableN}`} size="300" />}
+<input type="number" value={tableN} onChange={(e)=>setTable(e.target.value)} placeholder="Table Number" />
+</div>
+</Modal>
             {loading && <LoadingSpinner asOverlay />}
             <Card className="full_o">
                 <div className="topd">
                 <h2 className="rest_name">{props.name}</h2>
-                <span><ul><li><Link to='/logout'>Logout</Link></li>
-                 <li><Link to='/add'>Add</Link></li>
+                <span><ul>
+                <li><Button onClick={()=>setQR(true)}>QR Code</Button></li>
+                <li><Button to="/logout" danger>Logout</Button></li>              
                  </ul></span>
                 </div>
                 <hr />

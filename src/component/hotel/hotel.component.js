@@ -34,7 +34,7 @@ const HotelView=({clearCart,cartItems,selectCartItemsQuantity,selectCartItemsPri
  const [s_cart,Setcart]=useState(false)
  const [o_load,setOLoad]=useState(false)
  const [openPaypal,setOpenPaypal]=useState(false)
-
+ const [order,setOrder]=useState(false)
 
 
 
@@ -106,8 +106,9 @@ else
      setOLoad(false)
    
      clearCart()
+     hide_cart()
+     setOrder(true)
      
-     console.log(jp_s)
     }
    
   
@@ -284,6 +285,22 @@ Total Items:{selectCartItemsQuantity} - Total Price:{selectCartItemsPrice}</p>
 
 </div>
 }
+
+<Modal
+ show={order}
+ header="Cart Details"
+ onCancel={()=>setOrder(false)}
+ contentClass="place-item__modal-content"
+ footerClass="place-item__modal-actions"
+ footer={
+   <React.Fragment>
+     <Button onClick={()=>setOrder(false)} inverse>Close</Button>
+   </React.Fragment>
+ }
+>
+  <h1>Congratulations!!! Ordered Some Food.</h1>
+  <h4>Your Food is being prepared!!!!..</h4>
+</Modal>
 
 <Modal
  show={s_cart}

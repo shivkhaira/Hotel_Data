@@ -82,6 +82,7 @@ display: inline;
 {
     display: flex;
     justify-content: space-between;
+    width: 100%;
 
 }
 
