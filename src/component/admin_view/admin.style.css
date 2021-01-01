@@ -152,3 +152,37 @@ li{
     font-size: 1.2rem;
     width: 100%;
 }
+.qr_code
+{
+    width: 30vh;
+    height: 30vh;
+}
+
+@media screen and (max-width: 480px) {
+    .pending{
+        width: 100%;
+        border: 1px solid;
+        height: initial;
+        overflow-y:scroll;
+        float: left;
+    }
+
+    
+.pendingr{
+    width: 100%;
+    border: 1px solid;
+    height: initial;
+    overflow-y:scroll;
+    float: right;
+}
+
+.add_dishi
+{
+    width: 50%;
+}
+
+
+#capture{
+    width: 100%;
+}
+  }

@@ -1,42 +1,50 @@
 import React from 'react'
 import CustomInput from '../input/customInput.component'
-import CustomButton from '../button/button.component'
+import Button from '../../shared/Button'
 import {auth} from '../../firebase/firebase.utils'
 import { useState } from 'react'
 import {connect} from 'react-redux'
 import {createStructuredSelector} from 'reselect'
 import {selectCurrentUser} from '../redux/user/user.selector'
-import {Link} from 'react-router-dom'
+import { Redirect} from 'react-router-dom'
+import Card from '../../shared/Card'
+import LoadingSpinner from '../../component/LoadSpin/loading'
+import './signin.css'
 
 const Login=({currentUser})=>{
 
 const [email,Setemail]=useState('')
 const [password,Setpassword]=useState('')
+const [loading,setLoading]=useState(false)
+const [loginText,setText]=useState(0)
 
 const handle=async e=>{
+    setLoading(true)
     e.preventDefault();
    try{
       
      await auth.signInWithEmailAndPassword(email,password)       
        Setemail('')
        Setpassword('')
+       setText('Login Successful.... Redirecting!!!!')
    }
   catch(error)
   {
       console.error(error)
       if(error.code==='auth/user-not-found')
       {
-       console.log("Username not")
+      alert("Username not")
       }
       else if(error.code==='auth/wrong-password')
       {
-           console.log("Passowrd w")
+           alert("Check Your Password")
       }
       else 
       {
            console.log("Go")
       }
   }
+  setLoading(false)
 }
 
 
@@ -52,23 +60,30 @@ const handleChange=event=>{
 }
 
     return(
+        <Card className="inmate">
+               
+{loading && <LoadingSpinner asOverlay />}
        <div>
            {
                
     currentUser?
-    <div className='option' onClick={()=>auth.signOut()}>SIGN OUT</div>
+   <Redirect to='/rest' />
     :
-    <Link to='login'>SIGN IN</Link>
-}
-             <form onSubmit={handle}>
-                <CustomInput label="Email" type="email" name="email" value={email} onChange={handleChange} required />
+
+             <form onSubmit={handle} className="sing">
+                Email: <CustomInput label="Email" type="email" placeholder="Email" name="email" value={email} onChange={handleChange} required />
               
-                <CustomInput label="Password" type="password" name="password" value={password} onChange={handleChange} required />
+                Password: <CustomInput label="Password" type="password" placeholder="Password" name="password" value={password} onChange={handleChange} required />
             <div className='buttons'>
-                <CustomButton type="submit">Sign In</CustomButton>
+                <Button type="submit">Sign In</Button>
             </div>
+            <br />
+            {loginText!==0 && <p style={{color:'green'}}>{loginText}</p>}
             </form>
-       </div>
+        
+           }
+            </div>
+       </Card>
     )
 }
 

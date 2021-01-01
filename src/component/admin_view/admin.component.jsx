@@ -7,9 +7,9 @@ import LoadingSpinner from '../../component/LoadSpin/loading'
 import {firestore} from '../../firebase/firebase.utils'
 import Orders from '../../component/orders/orders.component'
 import Category from '../../component/data/category.component'
-import QrCode from 'react.qrcode.generator'
 import Modal from '../../shared/Modal'
 import Button from '../../shared/Button'
+import QR from './qr'
 
 import './admin.style.css'
 const Admin=props=>{
@@ -20,7 +20,6 @@ const Admin=props=>{
     const [pend,setPend]=useState(0)
     const [showQR,setQR]=useState(false)
     const [tableN,setTable]=useState('')
-    const [image,setImage]=useState(false)
 
 const comp=(e)=>{
     var o_id=e.target.name
@@ -71,35 +70,25 @@ const comp=(e)=>{
 })
    },[props.rest.res_id])
 
-const genQR=(e)=>{
-    setImage(false)
-e.preventDefault()
-if(tableN==='')
-{
-    alert("Enter Table Number")
-   return 0
-}
-setImage(true)
-}
+
 
     return(
         <React.Fragment>
                           <Modal
  show={showQR}
  header="Generate QR Code"
- onSubmit={genQR}
  onCancel={()=>setQR(false)}
  contentClass="place-item__modal-content"
  footerClass="place-item__modal-actions"
  footer={
    <React.Fragment>
      <Button onClick={()=>setQR(false)} type="button" inverse>Close</Button>
-     <Button onClick={()=>{}} type="submit">Generate</Button>
+   
    </React.Fragment>
  }
 >
     <div className="add_dishi">
-        {image && <QrCode value={`https://crown-db-98bb2.firebaseapp.com/view/${props.rest.res_id}/${tableN}`} size="300" />}
+    {tableN!=='' && <div style={{textAlign:'center'}}><QR id={props.rest.res_id} tid={tableN} /></div>}
 <input type="number" value={tableN} onChange={(e)=>setTable(e.target.value)} placeholder="Table Number" />
 </div>
 </Modal>
